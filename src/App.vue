@@ -1,15 +1,23 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+<el-header>南京市xxx监测系统</el-header>
+<el-row>
+  <el-col :span="4"><leftcol></leftcol></el-col>
+  <el-col :span="16"><MMap></MMap></el-col>
+  <el-col :span="4"><rtcol></rtcol></el-col>
+</el-row>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import leftcol from "@/components/leftcol.vue";
+import MMap from "@/components/map.vue";
+import rtcol from "@/components/rtcol.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    leftcol,
+    MMap,
+    rtcol,
   },
 };
 </script>
