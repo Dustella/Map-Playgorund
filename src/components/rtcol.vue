@@ -39,31 +39,22 @@
       </div>
     </div>
   </el-card>
-
+  <!-- v-model="dialogVisible" -->
   <el-dialog
     v-model="dialogVisible"
     title="详细指标"
     width="50%"
-    @open="open()"
+    @opened="opens"
   >
     <span>图</span>
-    <div style="height: 50vh">
-      <chart
-        auto-resize
-        :options="chartPieData"
-        ref="chartPie"
-        :style="{ width: '100%' }"
-      ></chart>
-    </div>
+    <div class="gram">
+      <echart :option="chartPieData" autoresize="true" ref="pieChart"></echart>
+      </div>
     <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >Confirm</el-button
-        >
-      </span>
+      <span class="dialog-footer"> </span>
     </template>
   </el-dialog>
+
 
   <el-card class="suggestions">
     <template #header>
@@ -80,57 +71,93 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { use } from "echarts/core";
+import { CanvasRenderer } from "echarts/renderers";
+import { PieChart } from "echarts/charts";
+import {
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent
+} from "echarts/components";
 import ECharts from "vue-echarts";
-import "echarts/lib/chart/pie";
+import { ref, defineComponent } from "vue";
+
+use([
+  CanvasRenderer,
+  PieChart,
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent
+]);
 
 export default defineComponent({
   name: "rt-col",
-  setup() {
+  setup: () => {
     const dialogVisible = ref(false);
 
-    return {
-      dialogVisible,
-    };
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.drawline();
+    const chartPieData = ref({
+      series: [
+        {
+          type: "pie",
+          data: [
+            {
+              value: 335,
+              name: "直接访问",
+            },
+            {
+              value: 234,
+              name: "联盟广告",
+            },
+            {
+              value: 1548,
+              name: "搜索引擎",
+            },
+          ],
+        },
+      ],
     });
+
+    return { chartPieData, dialogVisible };
   },
   data() {
     return {
       pollution_lvl: "污染等级5",
-      chartPieData: {
-        series: [
-          {
-            type: "pie",
-            data: [
-              {
-                value: 335,
-                name: "直接访问",
-              },
-              {
-                value: 234,
-                name: "联盟广告",
-              },
-              {
-                value: 1548,
-                name: "搜索引擎",
-              },
-            ],
-          },
-        ],
-      },
+      // chartPieData: {
+      //   series: [
+      //     {
+      //       type: "pie",
+      //       data: [
+      //         {
+      //           value: 335,
+      //           name: "直接访问",
+      //         },
+      //         {
+      //           value: 234,
+      //           name: "联盟广告",
+      //         },
+      //         {
+      //           value: 1548,
+      //           name: "搜索引擎",
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
     };
   },
-  methods: {
-    open() {
-      this.$ECharts.init(this.$refs.chartPie).setOption(this.option1);
-    },
-  },
+
   components: {
-    chart: ECharts,
+    echart: ECharts,
   },
 });
 </script>
+
+<style scoped>
+.gram {
+  position: relative;
+  margin: 0 auto;
+  padding: auto;
+  height: 50vh;
+  width:50vw;
+}
+</style>
