@@ -2,7 +2,7 @@
   <el-card class="Pollution_lvl" shadow="always">
     <template #header>
       <div class="card-header">
-        <span>污染等级</span>
+        <span class="card-title">污染等级</span>
       </div>
     </template>
     <div>
@@ -13,13 +13,15 @@
   <el-card class="region_distribute">
     <template #header>
       <div class="card-header">
-        <span>区域贡献</span>
-        <el-button class="button" type="text">查看详情</el-button>
+        <span class="card-title">重点企业</span>
+        <el-button class="button" type="text" @click="dialogZoneVisible = true"
+          >查看详情</el-button
+        >
       </div>
     </template>
     <div>
-      <div v-for="o in 4" :key="o" class="text item">
-        {{ "List item " + o }}
+      <div v-for="o in infoZone" :key="o" class="text item">
+        {{ "数据： " + o }}
       </div>
     </div>
   </el-card>
@@ -27,34 +29,21 @@
   <el-card class="near_source_distribute">
     <template #header>
       <div class="card-header">
-        <span>近源贡献</span>
-        <el-button class="button" type="text" @click="dialogVisible = true"
-          >查看详情</el-button
-        >
+        <span class="card-title">近源贡献</span>
+        <el-button
+          class="button"
+          type="text"
+          @click="dialogSourceVisible = true"
+          >查看详情
+        </el-button>
       </div>
     </template>
     <div>
-      <div v-for="o in 4" :key="o" class="text item">
-        {{ "List item " + o }}
+      <div v-for="o in infoSource" :key="o" class="text item">
+        {{ "数据： " + o }}
       </div>
     </div>
   </el-card>
-  <!-- v-model="dialogVisible" -->
-  <el-dialog
-    v-model="dialogVisible"
-    title="详细指标"
-    width="50%"
-    @opened="opens"
-  >
-    <span>图</span>
-    <div class="gram">
-      <echart :option="chartPieData" autoresize="true" ref="pieChart"></echart>
-      </div>
-    <template #footer>
-      <span class="dialog-footer"> </span>
-    </template>
-  </el-dialog>
-
 
   <el-card class="suggestions">
     <template #header>
@@ -68,6 +57,24 @@
       </div>
     </div>
   </el-card>
+
+  <el-dialog v-model="dialogSourceVisible" title="污染来源" width="50%">
+    <div class="gram">
+      <echart :option="SourceData" autoresize="true" ref="pieChart"></echart>
+    </div>
+    <template #footer>
+      <span class="dialog-footer"> </span>
+    </template>
+  </el-dialog>
+
+  <el-dialog v-model="dialogZoneVisible" title="重点企业" width="50%">
+    <div class="gram">
+      <echart :option="ZoneData" autoresize="true" ref="pieChart"></echart>
+    </div>
+    <template #footer>
+      <span class="dialog-footer"> </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -77,7 +84,7 @@ import { PieChart } from "echarts/charts";
 import {
   TitleComponent,
   TooltipComponent,
-  LegendComponent
+  LegendComponent,
 } from "echarts/components";
 import ECharts from "vue-echarts";
 import { ref, defineComponent } from "vue";
@@ -87,62 +94,77 @@ use([
   PieChart,
   TitleComponent,
   TooltipComponent,
-  LegendComponent
+  LegendComponent,
 ]);
 
 export default defineComponent({
   name: "rt-col",
   setup: () => {
-    const dialogVisible = ref(false);
+    const dialogSourceVisible = ref(false);
+    const dialogZoneVisible = ref(false);
 
-    const chartPieData = ref({
+    const SourceData = ref({
+      series: [
+        {
+          type: "pie",
+          data: [
+            // {
+            //   value: 335,
+            //   name: "近源污染",
+            // },
+            {
+              value: 100,
+              name: "近源1",
+            },
+            {
+              value: 100,
+              name: "近源2",
+            },
+            {
+              value: 135,
+              name: "近源3",
+            },
+            {
+              value: 234,
+              name: "汽车尾气",
+            },
+            {
+              value: 1548,
+              name: "大气背景浓度",
+            },
+          ],
+        },
+      ],
+    });
+    const ZoneData = ref({
       series: [
         {
           type: "pie",
           data: [
             {
               value: 335,
-              name: "直接访问",
+              name: "企业1",
             },
             {
               value: 234,
-              name: "联盟广告",
+              name: "企业2",
             },
             {
               value: 1548,
-              name: "搜索引擎",
+              name: "企业3",
             },
           ],
         },
       ],
     });
 
-    return { chartPieData, dialogVisible };
+    return { SourceData, dialogSourceVisible, dialogZoneVisible, ZoneData };
   },
   data() {
     return {
       pollution_lvl: "污染等级5",
-      // chartPieData: {
-      //   series: [
-      //     {
-      //       type: "pie",
-      //       data: [
-      //         {
-      //           value: 335,
-      //           name: "直接访问",
-      //         },
-      //         {
-      //           value: 234,
-      //           name: "联盟广告",
-      //         },
-      //         {
-      //           value: 1548,
-      //           name: "搜索引擎",
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // },
+      infoZone: ["企业1", "企业2", "企业3"],
+      infoSource: ["第一条数据", "第二条数据", "第三条数据"],
     };
   },
 
@@ -158,6 +180,10 @@ export default defineComponent({
   margin: 0 auto;
   padding: auto;
   height: 50vh;
-  width:50vw;
+  width: 50vw;
+}
+
+.card-title {
+  font-size: 18px;
 }
 </style>
