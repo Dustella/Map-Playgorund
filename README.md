@@ -1,24 +1,23 @@
-# mmap
+# 一个给环科院老师写的预警系统demo
 
-## Project setup
-```
+学习vue的上手项目之一。用了elementUI，接入了高德地图，稍微用到了模态框。
+
+技术力不强，上手之作
+
+## 初始化项目
+
+```bash
 yarn install
 ```
 
-### Compiles and hot-reloads for development
-```
+### 启动测试和热重载
+
+```bash
 yarn serve
 ```
 
-### Compiles and minifies for production
-```
+### 编译生产环境版本
+
+```bash
 yarn build
 ```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
